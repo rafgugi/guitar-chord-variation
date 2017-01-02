@@ -9,8 +9,11 @@ Main = React.createClass
   getInitialState: ->
     active: false
     chord: []
+
+  componentDidMount: ->
+    @easyChord()
     
-  handleChordClick: ->
+  easyChord: ->
     root = Number(@chordRoot.value)
     chord = []
     manualChord = []
@@ -43,7 +46,7 @@ Main = React.createClass
             dom 'option', key: i, value: i, chord.text
         dom 'button',
           className: 'button-primary'
-          onClick: @handleChordClick
+          onClick: @easyChord
           'Apply'
         dom 'hr'
         dom 'label', {}, 'Manual Chord'
