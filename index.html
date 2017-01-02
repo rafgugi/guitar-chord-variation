@@ -1,0 +1,48 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <title>Ez Guitar Chord</title>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+  <link rel="stylesheet" href="bower_components/skeleton-framework/dist/skeleton.min.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body style="min-width: 200px; padding-top: 20px;">
+  <div class="container">
+    <header>
+      <h2>easy guitar <strong>chord variation</strong> finder.</h2>
+    </header>
+
+    <main id="ng-app">
+      <NavBar>
+        <NavComponent>
+          <NavTitle title="Ez Guitar Chord"></NavTitle>
+        </NavComponent>
+      </NavBar>
+      <Guitar>
+        <String name="C"></String>
+        <String name="C#" active="true"></String>
+        <String name="D"></String>
+        <String name="D#"></String>
+        <String name="E"></String>
+        <String name="F" active="true"></String>
+        <String name="F#"></String>
+        <String name="G"></String>
+        <String name="G#" active="true"></String>
+        <String name="A"></String>
+        <String name="A#"></String>
+        <String name="B"></String>
+      </Guitar>
+    </main>
+    <footer>
+      <br>
+    </footer>
+  </div>
+  <script src="assets/js/app.js"></script>
+  <script src="dist/js/app2.js"></script>
+</body>
+</html>

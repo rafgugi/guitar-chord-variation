@@ -1,0 +1,20 @@
+{
+  "name": "ez-guitar-chord",
+  "version": "0.0.012",
+  "authors": "",
+  "main": "gulpfile.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "skeleton-framework": "^1.1.1",
+    "normalize-css": "^5.0.0"
+  },
+  "private": true
+}
