@@ -36,18 +36,16 @@ Main = React.createClass
         dom 'select',
           className: 'u-full-width'
           ref: (input) => @chordRoot = input
+          onChange: @easyChord
           for note, i in music.notes
             dom 'option', key: i, value: i, note
         dom 'label', {}, 'Chord Variation'
         dom 'select',
           className: 'u-full-width'
           ref: (input) => @chordVariation = input
+          onChange: @easyChord
           for chord, i in music.chords
             dom 'option', key: i, value: i, chord.text
-        dom 'button',
-          className: 'button-primary'
-          onClick: @easyChord
-          'Apply'
         dom 'hr'
         dom 'label', {}, 'Manual Chord'
         dom 'input',
