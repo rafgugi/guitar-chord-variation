@@ -1,7 +1,7 @@
 React = require 'react'
 dom = React.createElement
 
-notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+{ notes } = require '../music'
 
 Nylon = React.createClass
   displayName: 'String'
@@ -17,14 +17,14 @@ Nylon = React.createClass
 Guitar = React.createClass
   displayName: 'Guitar'
 
-  getInitialState: ->
+  getDefaultProps: ->
     tuning: [4, 9, 2, 7, 11, 4]
     fret: 13
     chord: [0, 4, 7]
   
   render: ->
-    tuning = @state.tuning
-    chord = @state.chord
+    tuning = @props.tuning
+    chord = @props.chord
     dom 'div', className: 'guitar',
       dom 'div', className: 'tunings',
         for tune, i in tuning
@@ -34,7 +34,7 @@ Guitar = React.createClass
           dom 'div', key: i, className: 'zero', 
             if tune in chord
               dom 'i', className: "fa fa-circle color-#{tune}"
-      for fret in [0..@state.fret]
+      for fret in [0..@props.fret]
         dom 'div', key: fret, className: 'fret',
           if fret % 2 is 0
             dom 'span', key: 'index', className: 'index', fret

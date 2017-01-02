@@ -11,31 +11,32 @@
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/css/app.css">
 </head>
-<body style="min-width: 200px; padding-top: 20px;">
+<body style="min-width: 200px; padding-top: 16px;">
   <div class="container">
     <header>
-      <h2>easy guitar <strong>chord variation</strong> finder.</h2>
+      <h3>
+        Easy guitar <strong>chord variation</strong> finder.<br>
+        <small class="color-muted">Find your own chord variation and tell your friends.</small>
+      </h3>
     </header>
 
     <main id="ng-app">
-      <NavBar>
-        <NavComponent>
-          <NavTitle title="Ez Guitar Chord"></NavTitle>
-        </NavComponent>
-      </NavBar>
+      <form>
+        <ChordRoot>
+          <option values="C C# D D# E F F# G G# A A# B"></option>
+        </ChordRoot>
+        <ChordVariation>
+          <option values="maj maj7 7 min min7 sus"></option>
+        </ChordVariation>
+        <ManualChord></ManualChord>
+      </form>
       <Guitar>
-        <String name="C"></String>
-        <String name="C#" active="true"></String>
-        <String name="D"></String>
-        <String name="D#"></String>
-        <String name="E"></String>
-        <String name="F" active="true"></String>
-        <String name="F#"></String>
-        <String name="G"></String>
-        <String name="G#" active="true"></String>
-        <String name="A"></String>
-        <String name="A#"></String>
-        <String name="B"></String>
+        <Fret tune="E"></Fret>
+        <Fret tune="A"></Fret>
+        <Fret tune="D"></Fret>
+        <Fret tune="G"></Fret>
+        <Fret tune="B"></Fret>
+        <Fret tune="E"></Fret>
       </Guitar>
     </main>
     <footer>

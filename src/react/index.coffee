@@ -2,10 +2,9 @@ window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {}
 React = require 'react'
 ReactDOM = require 'react-dom'
 dom = React.createElement
-Content = require './components/Content'
+Main = require './components/Main'
 
 ReactDOM.render(
-  dom 'section', {}, dom Content
-
+  dom 'section', {}, dom Main
   document.getElementById 'ng-app'
 )

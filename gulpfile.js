@@ -22,7 +22,6 @@ function compileReact() {
     .pipe(browserify({ transform: ['coffeeify'], extensions: ['.coffee'] }))
     .pipe(concat('app2.js'))
     .pipe($.uglify().on('error', function(e) { console.log(e); }))
-    .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest('dist/js'));
 }
 

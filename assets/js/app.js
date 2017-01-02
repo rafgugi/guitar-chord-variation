@@ -1,5 +1,5 @@
 console.log('Application started');
 var Application = function($$) {
-	$$.start = true;
+  $$.start = true;
 };
 var guitar = new Application(window);
