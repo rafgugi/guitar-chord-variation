@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
   <link rel="stylesheet" href="bower_components/skeleton-framework/dist/skeleton.min.css">
-  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body style="min-width: 200px; padding-top: 16px;">
@@ -19,18 +18,17 @@
         <small class="color-muted">Find your own chord variation and tell your friends.</small>
       </h3>
     </header>
-
     <main id="ng-app">
       <form>
-        <ChordRoot>
-          <option values="C C# D D# E F F# G G# A A# B"></option>
+        <ChordRoot type="select">
+          <options values="C C# D D# E F F# G G# A A# B"></options>
         </ChordRoot>
-        <ChordVariation>
-          <option values="maj maj7 7 min min7 sus"></option>
+        <ChordVariation type="select">
+          <options values="maj maj7 7 min min7 sus"></options>
         </ChordVariation>
-        <ManualChord></ManualChord>
+        <ManualChord type="text"></ManualChord>
       </form>
-      <Guitar>
+      <Guitar orientation="vertical">
         <Fret tune="E"></Fret>
         <Fret tune="A"></Fret>
         <Fret tune="D"></Fret>

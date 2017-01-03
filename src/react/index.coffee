@@ -5,6 +5,6 @@ dom = React.createElement
 Main = require './components/Main'
 
 ReactDOM.render(
-  dom 'section', {}, dom Main
+  dom Main
   document.getElementById 'ng-app'
 )

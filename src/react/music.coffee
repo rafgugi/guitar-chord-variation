@@ -1,7 +1,4 @@
 class Music
-  constructor: ->
-    {}
-
   notes: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
   chords: [
@@ -12,7 +9,7 @@ class Music
     { text: 'min7', chord: [0, 3, 7, 10] }
     { text: 'sus', chord: [0, 5, 7] }
   ]
-    
+
   predictNotes: (text) ->
     ans = []
     for note in text.split(' ')

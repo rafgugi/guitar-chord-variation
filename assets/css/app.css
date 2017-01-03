@@ -2,6 +2,13 @@ hr {
   margin-top: 0;
 }
 
+.row .col {
+  float: left;
+  min-height: 1px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .guitar {
   border-top: 1px solid #333;
   width: 130px;
@@ -32,6 +39,10 @@ hr {
   margin-top:  -12px;
 }
 
+.guitar .zeroes {
+  height: 26px;
+}
+
 .guitar .fret .string {
   width: 20px;
   height: 50px;
@@ -43,10 +54,16 @@ hr {
   text-align: center;
 }
 
-.guitar .fret .string .fa {
+.guitar .fret .string .dot {
   position: absolute;
-  margin: 21px -6px;
+  margin: 16px -7px;
   z-index: 12;
+}
+
+.dot:before {
+  font-style: normal;
+  font-size: 25px;
+  content: "\26AB";
 }
 
 .guitar .fret .string:after {

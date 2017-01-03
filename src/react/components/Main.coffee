@@ -12,7 +12,7 @@ Main = React.createClass
 
   componentDidMount: ->
     @easyChord()
-    
+
   easyChord: ->
     root = Number(@chordRoot.value)
     chord = []
@@ -22,7 +22,7 @@ Main = React.createClass
       chord.push(note)
       manualChord.push(music.notes[note])
     @manualChord.value = manualChord.join(' ')
-    @setState 
+    @setState
       chord: chord
 
   handleManualChordChange: (e) ->
@@ -30,8 +30,8 @@ Main = React.createClass
       chord: music.predictNotes(e.target.value)
 
   render: ->
-    dom 'div', style: display: 'table',
-      dom 'span', style: float: 'left', marginRight: '20px', width: '240px',
+    dom 'section', className: 'row',
+      dom 'span', className: 'col', style: width: '260px',
         dom 'label', {}, 'Chord Root'
         dom 'select',
           className: 'u-full-width'
@@ -54,7 +54,7 @@ Main = React.createClass
           placeholder: 'try C E G B'
           ref: (input) => @manualChord = input
           onChange: @handleManualChordChange
-      dom 'span', style: float: 'left',
+      dom 'span', className: 'col',
         dom Guitar, chord: @state.chord
 
 module.exports = Main
