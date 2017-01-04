@@ -1,4 +1,4 @@
-## Love Letter (Unofficial)
+## Guitar chord variation
 
 ### How do I get set up?
 

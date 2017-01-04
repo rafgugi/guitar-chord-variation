@@ -19,6 +19,7 @@ Guitar = React.createClass
   getDefaultProps: ->
     tuning: [4, 9, 2, 7, 11, 4]
     fret: 13
+    fretHints: [0, 3, 5, 7, 9, 12, 15, 17]
     chord: [0, 4, 7]
 
   render: ->
@@ -35,7 +36,7 @@ Guitar = React.createClass
               dom 'i', className: "dot color-#{tune}", title: notes[tune]
       for fret in [0..@props.fret]
         dom 'div', key: fret, className: 'fret',
-          if fret % 2 is 0
+          if fret in @props.fretHints
             dom 'span', key: 'index', className: 'index', fret
           for j in [0..5]
             note = (tuning[j] + fret + 1) % 12
