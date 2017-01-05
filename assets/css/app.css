@@ -9,6 +9,10 @@ hr {
   padding-right: 0.5rem;
 }
 
+.inputs {
+  width: 260px;
+}
+
 .guitar {
   border-top: 1px solid #333;
   width: 130px;

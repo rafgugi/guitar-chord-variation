@@ -8,14 +8,22 @@ class Music
     { text: 'min', chord: [0, 3, 7] }
     { text: 'min7', chord: [0, 3, 7, 10] }
     { text: 'sus', chord: [0, 5, 7] }
+    { text: 'aug', chord: [0, 4, 8] }
+    { text: 'dim', chord: [0, 3, 6] }
   ]
 
+  # Convert string of notes to array of numbered notes.
+  # example: 'C G E' become [0, 4, 7]
   predictNotes: (text) ->
-    ans = []
     for note in text.split(' ')
       predicted = @notes.indexOf note
-      if predicted > -1
-        ans.push(predicted)
-    ans
+      predicted if predicted > -1
+
+  # Generate chord (array of note) from given chord root and
+  # chord variation.
+  # example of A minor: -> (9, 3) become [9, 0, 4]
+  generateChord: (chordRoot, chordVariation) ->
+    for interval in @chords[chordVariation].chord
+      (chordRoot + interval) % 12
 
 module.exports = new Music

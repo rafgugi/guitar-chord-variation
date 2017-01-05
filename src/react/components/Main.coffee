@@ -7,23 +7,31 @@ Main = React.createClass
   displayName: 'Main'
 
   getInitialState: ->
-    active: false
-    chord: []
+    chord: [] # current chord
 
   componentDidMount: ->
     @easyChord()
 
+  # inputs dom
+  chordRoot: null
+  chordVariation: null
+  manualChord: null
+
+  # Get chord root and chord variation, then generate
+  # chord from them
   easyChord: ->
     root = Number(@chordRoot.value)
-    chord = []
-    manualChord = []
-    for interval in music.chords[@chordVariation.value].chord
-      note = (root + interval) % 12
-      chord.push(note)
-      manualChord.push(music.notes[note])
-    @manualChord.value = manualChord.join(' ')
+    variation = @chordVariation.value
+
+    # Get chord array
+    chord = music.generateChord(root, variation)
     @setState
       chord: chord
+
+    # Create chord text
+    manualChord = for note in chord
+      music.notes[note]
+    @manualChord.value = manualChord.join(' ')
 
   handleManualChordChange: (e) ->
     @setState
@@ -31,15 +39,19 @@ Main = React.createClass
 
   render: ->
     dom 'section', className: 'row',
-      dom 'span', className: 'col', style: width: '260px',
-        dom 'label', {}, 'Chord Root'
+      dom 'span', className: 'col inputs',
+
+        # Chord root input
+        dom 'label', {}, 'Chord root'
         dom 'select',
           className: 'u-full-width'
           ref: (input) => @chordRoot = input
           onChange: @easyChord
           for note, i in music.notes
             dom 'option', key: i, value: i, note
-        dom 'label', {}, 'Chord Variation'
+
+        # Chord variation input
+        dom 'label', {}, 'Chord variation'
         dom 'select',
           className: 'u-full-width'
           ref: (input) => @chordVariation = input
@@ -47,13 +59,17 @@ Main = React.createClass
           for chord, i in music.chords
             dom 'option', key: i, value: i, chord.text
         dom 'hr'
-        dom 'label', {}, 'Manual Chord'
+
+        # Manual chord input
+        dom 'label', {}, 'Manual chord'
         dom 'input',
           type: 'text'
           className: 'u-full-width'
           placeholder: 'try C E G B'
           ref: (input) => @manualChord = input
           onChange: @handleManualChordChange
+
+      # Guitar
       dom 'span', className: 'col',
         dom Guitar, chord: @state.chord
 
