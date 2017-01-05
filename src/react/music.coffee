@@ -7,9 +7,11 @@ class Music
     { text: '7', chord: [0, 4, 7, 10] }
     { text: 'min', chord: [0, 3, 7] }
     { text: 'min7', chord: [0, 3, 7, 10] }
-    { text: 'sus', chord: [0, 5, 7] }
     { text: 'aug', chord: [0, 4, 8] }
+    { text: 'aug7', chord: [0, 4, 8, 11] }
     { text: 'dim', chord: [0, 3, 6] }
+    { text: 'dim7', chord: [0, 3, 6, 9] }
+    { text: 'sus', chord: [0, 5, 7] }
   ]
 
   # Convert string of notes to array of numbered notes.
