@@ -8,14 +8,17 @@ Main = React.createClass
 
   getInitialState: ->
     chord: [] # current chord
+    tuning: [4, 9, 2, 7, 11, 4] # current tuning
 
   componentDidMount: ->
     @easyChord()
+    @resetTuning()
 
   # inputs dom
   chordRoot: null
   chordVariation: null
   manualChord: null
+  manualTuning: null
 
   # Get chord root and chord variation, then generate
   # chord from them
@@ -36,6 +39,17 @@ Main = React.createClass
   handleManualChordChange: (e) ->
     @setState
       chord: music.predictNotes(e.target.value)
+
+  handleManualTuningChange: (e) ->
+    tuning = music.predictNotes(e.target.value)
+    if tuning.length == 6
+      @setState
+        tuning: tuning
+
+  resetTuning: ->
+    manualTuning = for note in @state.tuning
+      music.notes[note]
+    @manualTuning.value = manualTuning.join(' ')
 
   render: ->
     dom 'section', className: 'row',
@@ -69,8 +83,18 @@ Main = React.createClass
           ref: (input) => @manualChord = input
           onChange: @handleManualChordChange
 
+        # Manual tuning input
+        dom 'label', {}, 'Manual tuning'
+        dom 'input',
+          type: 'text'
+          className: 'u-full-width'
+          placeholder: 'E A D G B E'
+          ref: (input) => @manualTuning = input
+          onChange: @handleManualTuningChange
+          onBlur: @resetTuning
+
       # Guitar
       dom 'span', className: 'col',
-        dom Guitar, chord: @state.chord
+        dom Guitar, chord: @state.chord, tuning: @state.tuning
 
 module.exports = Main

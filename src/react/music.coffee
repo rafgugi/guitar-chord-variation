@@ -17,9 +17,11 @@ class Music
   # Convert string of notes to array of numbered notes.
   # example: 'C G E' become [0, 4, 7]
   predictNotes: (text) ->
+    result = []
     for note in text.split(' ')
       predicted = @notes.indexOf note
-      predicted if predicted > -1
+      result.push(predicted) if predicted > -1
+    result
 
   # Generate chord (array of note) from given chord root and
   # chord variation.
