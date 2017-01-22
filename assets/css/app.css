@@ -66,14 +66,8 @@ hr {
 
 .guitar .fret .string .dot {
   position: absolute;
-  margin: 17px -6px;
+  margin: 21px -6px;
   z-index: 12;
-}
-
-.dot:before {
-  font-style: normal;
-  font-size: 22px;
-  content: "\26AB";
 }
 
 .guitar .fret .string:after {

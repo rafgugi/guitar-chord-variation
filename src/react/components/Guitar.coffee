@@ -2,6 +2,21 @@ React = require 'react'
 dom = React.createElement
 { notes } = require '../music'
 
+# This is just a dot on a fret defining the tune.
+Dot = React.createClass
+  displayName: 'Dot'
+
+  getDefaultProps: ->
+    color: 0
+    title: '-'
+    active: false
+
+  render: ->
+    dom 'i', 
+      title: @props.title
+      className: "dot fa fa-circle color-#{@props.color}"
+
+
 # This component is a string per fret on guitar
 Nylon = React.createClass
   displayName: 'Nylon'
@@ -12,7 +27,7 @@ Nylon = React.createClass
   render: ->
     dom 'div', className: 'string', title: notes[@props.note],
       if @props.active
-        dom 'i', className: "dot color-#{@props.note}", title: notes[@props.note]
+        dom Dot, color: @props.note, title: notes[@props.note]
 
 
 # Guitar has 3 components: Tunings, Zeroes (dot at fret-0) and Frets. 
@@ -38,7 +53,7 @@ Guitar = React.createClass
         for tune, i in tuning
           dom 'div', key: i, className: 'zero', title: notes[tune],
             if tune in chord
-              dom 'i', className: "dot color-#{tune}", title: notes[tune]
+              dom Dot, color: tune, title: notes[tune]
       # Frets. Each has 6 strings (Nylon). If string match to one of the chords, 
       # set as active
       for fret in [0..@props.fret]
