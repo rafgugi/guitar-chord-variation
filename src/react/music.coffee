@@ -1,4 +1,10 @@
+window.TONE_SILENCE_VERSION_LOGGING = true
+Tone = require 'tone'
+
 class Music
+  constructor: ->
+    @synth = new Tone.Synth().toMaster()
+
   notes: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
   chords: [
@@ -29,5 +35,8 @@ class Music
   generateChord: (chordRoot, chordVariation) ->
     for interval in @chords[chordVariation].chord
       (chordRoot + interval) % 12
+
+  toot: (tone, octave = 4, duration = '4n') ->
+    @synth.triggerAttackRelease(tone + octave, duration)
 
 module.exports = new Music
