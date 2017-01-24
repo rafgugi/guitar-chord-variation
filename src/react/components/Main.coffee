@@ -8,10 +8,22 @@ Main = React.createClass
 
   getInitialState: ->
     chord: [] # current chord
-    tuning: [4, 9, 2, 7, 11, 4] # current tuning
+    tuning: []
+    active: [] # dots that ready to play
     advanced: false
 
+  componentWillMount: ->
+    music.on 'chord', =>
+      @setState chord: music.chord
+    music.on 'tuning', =>
+      @setState tuning: music.tuning
+      @state.tuning = music.tuning
+      @resetTuning()
+    music.on 'active', =>
+      @setState active: music.active
+
   componentDidMount: ->
+    music.setTuning(music.defaultTuning)
     @easyChord()
     @resetTuning()
 
@@ -22,23 +34,24 @@ Main = React.createClass
   manualTuning: null
 
   handleManualChordChange: (e) ->
-    @setState
-      chord: music.predictNotes(e.target.value)
+    music.setChord music.predictNotes(e.target.value)
 
   handleManualTuningChange: (e) ->
     tuning = music.predictNotes(e.target.value)
     if tuning.length == 6
-      @setState
-        tuning: tuning
+      music.setTuning tuning
 
   handleAdvancedChange: (e) ->
     @setState
       advanced: e.target.checked
 
   handleResetButton: ->
-    @state.tuning = [4, 9, 2, 7, 11, 4]
-    @resetTuning()
+    music.setTuning(music.defaultTuning)
     @easyChord()
+    music.resetActive()
+
+  handlePlayButton: ->
+    music.playActive()
 
   # Get chord root and chord variation, then generate
   # chord from them
@@ -48,8 +61,7 @@ Main = React.createClass
 
     # Get chord array
     chord = music.generateChord(root, variation)
-    @setState
-      chord: chord
+    music.setChord chord
 
     # Create chord text
     manualChord = for note in chord
@@ -107,20 +119,25 @@ Main = React.createClass
             onChange: @handleManualTuningChange
             onBlur: @resetTuning
 
+          # buttons
           dom 'div', {},
             dom 'button',
               type: 'button'
               className: 'button'
               onClick: @handleResetButton
               'Reset'
-            # dom 'i', {}, ' '
-            # dom 'button',
-            #   type: 'button'
-            #   className: 'button-primary'
-            #   'Play'
+            dom 'i', {}, ' '
+            dom 'button',
+              type: 'button'
+              className: 'button-primary'
+              onClick: @handlePlayButton
+              'Play'
 
       # Guitar
       dom 'span', className: 'col',
-        dom Guitar, chord: @state.chord, tuning: @state.tuning
+        dom Guitar,
+          chord: @state.chord
+          tuning: @state.tuning
+          active: @state.active
 
 module.exports = Main

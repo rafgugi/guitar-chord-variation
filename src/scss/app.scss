@@ -89,75 +89,26 @@ hr {
 .color-muted {
   color: #adadad;
 }
-.color-0 {
-  color: #5ca793;
-}
-.color-1 {
-  color: #1395BA
-}
-.color-2 {
-  color: #117899;
-}
-.color-3 {
-  color: #0f5b78;
-}
-.color-4 {
-  color: #0d3c55;
-}
-.color-5 {
-  color: #c02e1d;
-}
-.color-6 {
-  color: #d94e1f;
-}
-.color-7 {
-  color: #f16c20;
-}
-.color-8 {
-  color: #ef8b2c;
-}
-.color-9 {
-  color: #ecaa38;
-}
-.color-10 {
-  color: #ebc844;
-}
-.color-11 {
-  color: #a2b86c;
-}
-.color-0-muted {
-  color: (#5ca793 + #ffffff) * 0.5;
-}
-.color-1-muted {
-  color: (#1395BA + #ffffff) * 0.5;
-}
-.color-2-muted {
-  color: (#117899 + #ffffff) * 0.5;
-}
-.color-3-muted {
-  color: (#0f5b78 + #ffffff) * 0.5;
-}
-.color-4-muted {
-  color: (#0d3c55 + #ffffff) * 0.5;
-}
-.color-5-muted {
-  color: (#c02e1d + #ffffff) * 0.5;
-}
-.color-6-muted {
-  color: (#d94e1f + #ffffff) * 0.5;
-}
-.color-7-muted {
-  color: (#f16c20 + #ffffff) * 0.5;
-}
-.color-8-muted {
-  color: (#ef8b2c + #ffffff) * 0.5;
-}
-.color-9-muted {
-  color: (#ecaa38 + #ffffff) * 0.5;
-}
-.color-10-muted {
-  color: (#ebc844 + #ffffff) * 0.5;
-}
-.color-11-muted {
-  color: (#a2b86c + #ffffff) * 0.5;
+
+$colors-list:
+  #5ca793
+  #1395BA
+  #117899
+  #0f5b78
+  #0d3c55
+  #c02e1d
+  #d94e1f
+  #f16c20
+  #ef8b2c
+  #ecaa38
+  #ebc844
+  #a2b86c;
+@each $current-color in $colors-list {
+  $i: index($colors-list, $current-color) - 1;
+  .color-#{$i} { 
+    color: $current-color;
+  }
+  .color-#{$i}-muted {
+    color: ($current-color * 1 + #ffffff * 3) / 4;
+  }
 }

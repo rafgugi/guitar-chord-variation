@@ -1,10 +1,11 @@
 window.TONE_SILENCE_VERSION_LOGGING = true
+EventEmitter = require 'events'
 Tone = require 'tone'
 
 # handle music things and act as stores too
-class Music # extends EventEmitter
+class Music extends EventEmitter
   constructor: ->
-    # super()
+    super()
     @synth = new Tone.Synth().toMaster()
     @polySynth = new Tone.PolySynth(6, Tone.Synth).toMaster()
 
@@ -42,5 +43,60 @@ class Music # extends EventEmitter
   # Make a sound 'toot'
   toot: (tone, octave = 4, duration = '4n') ->
     @synth.triggerAttackRelease(tone + octave, duration)
+
+  # play a chord defined in @active
+  playActive: ->
+    notes = []
+    if @active.length is 0
+      @initActive()
+    for tune, i in @tuning
+      octave = @tuningOctave[i] + (tune + @active[i] + 1) / 12 >> 0
+      notes.push '' + @notes[(tune + @active[i] + 1) % 12] + octave
+    @polySynth.triggerAttackRelease(notes, '2n')
+
+  chord: []
+  defaultTuning: [4, 9, 2, 7, 11, 4]
+  tuning: []
+  tuningOctave: []
+  active: []
+  fret: 13
+
+  setChord: (chord) ->
+    @chord = chord
+    @emit('chord')
+    if @active.length isnt 0
+      @initActive()
+
+  setTuning: (tuning) ->
+    @tuning = tuning
+    @tuningOctave = [3] # first tuning octave
+    for tune, i in tuning
+      if i > 0 # first tuning octave is predefined
+        # otherwise define the current tuning octave
+        @tuningOctave.push(@tuningOctave[i - 1] + (tuning[i - 1] >= tune))
+    @emit('tuning')
+    if @active.length isnt 0
+      @initActive()
+
+  # iterate through all strings, then the first fret meet
+  # the active chord is set as active
+  initActive: ->
+    @active = []
+    for tune, i in @tuning
+      for fret in [0..@fret]
+        if (fret + tune) % 12 in @chord
+          @active.push fret
+          break
+    @emit('active')
+
+  setActive: (tune, fret) ->
+    if @active.length is 0
+      @initActive()
+    @active[tune] = fret
+    @emit('active')
+
+  resetActive: ->
+    @active = []
+    @emit('active')
 
 module.exports = new Music
