@@ -1,9 +1,12 @@
 window.TONE_SILENCE_VERSION_LOGGING = true
 Tone = require 'tone'
 
-class Music
+# handle music things and act as stores too
+class Music # extends EventEmitter
   constructor: ->
+    # super()
     @synth = new Tone.Synth().toMaster()
+    @polySynth = new Tone.PolySynth(6, Tone.Synth).toMaster()
 
   notes: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
@@ -36,6 +39,7 @@ class Music
     for interval in @chords[chordVariation].chord
       (chordRoot + interval) % 12
 
+  # Make a sound 'toot'
   toot: (tone, octave = 4, duration = '4n') ->
     @synth.triggerAttackRelease(tone + octave, duration)
 

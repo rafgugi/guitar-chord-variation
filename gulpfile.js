@@ -10,11 +10,19 @@ var concat     = require('gulp-concat');
 // Load all Gulp plugins into one variable
 const $ = plugins();
 
-// Check for --production flag
-const PRODUCTION = !!(yargs.argv.production);
-
 // Build the site, and watch for file changes
-gulp.task('default', gulp.series(compileReact, watch));
+gulp.task('default', gulp.series(
+  gulp.parallel(compileReact, sass), watch));
+
+// Compile Sass into CSS
+// In production, the CSS is compressed
+function sass() {
+  return gulp.src('src/scss/app.scss')
+    .pipe($.sass()
+      .on('error', $.sass.logError))
+    .pipe($.cssnano())
+    .pipe(gulp.dest('dist/css'));
+}
 
 // Compile react in coffeescript into javascript
 function compileReact() {
@@ -28,4 +36,5 @@ function compileReact() {
 // Watch for changes to static assets, pages, Sass, JavaScript, and CoffeeScript
 function watch() {
   gulp.watch('src/react/**/*.coffee').on('all', gulp.series(compileReact));
+  gulp.watch('src/scss/**/*.scss').on('all', gulp.series(sass));
 }

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
   <link rel="stylesheet" href="bower_components/skeleton-framework/dist/skeleton.min.css">
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="dist/css/app.css">
 </head>
 <body style="min-width: 200px; padding-top: 16px;">
   <div class="container">
@@ -27,10 +27,15 @@
         <ChordVariation type="select">
           <options values="maj maj7 7 min min7 sus aug aug7 dim dim7"></options>
         </ChordVariation>
-        <ManualChord type="text"></ManualChord>
-        <ManualTuning type="text"></ManualTuning>
+        <input type="checkbox" value="advanced" text="Advanced mode">
+        <if condition="advanced">
+          <ManualChord type="text"></ManualChord>
+          <ManualTuning type="text"></ManualTuning>
+          <button onclick="reset()">Reset</button>
+          <button class="primary" onclick="play()">Play</button>
+        </if>
       </form>
-      <Guitar orientation="vertical" frets="13">
+      <Guitar orientation="vertical" frets="13" with-sound="true">
         <String tune="E"></String>
         <String tune="A"></String>
         <String tune="D"></String>
@@ -40,6 +45,11 @@
       </Guitar>
     </main>
     <footer>
+      <br>
+      <!-- github stars -->
+      <iframe class="github-btn" src="https://ghbtns.com/github-btn.html?user=rafgugi&amp;repo=ez-guitar-chord&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+      <!-- github clone -->
+      <iframe class="github-btn" src="https://ghbtns.com/github-btn.html?user=rafgugi&amp;repo=ez-guitar-chord&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
       <br>
     </footer>
   </div>

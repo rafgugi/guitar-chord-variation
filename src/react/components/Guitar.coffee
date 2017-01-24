@@ -7,18 +7,14 @@ notes = music.notes
 Dot = React.createClass
   displayName: 'Dot'
 
-  getDefaultProps: ->
-    note: 0
-    active: false
-    octave: 2
-
   attack: ->
     music.toot(notes[@props.note], @props.octave)
 
   render: ->
+    active = if @props.active then '' else '-muted'
     dom 'i',
       title: notes[@props.note]
-      className: "dot fa fa-circle color-#{@props.note}"
+      className: "dot fa fa-circle color-#{@props.note}#{active}"
       onClick: @attack
 
 
@@ -27,19 +23,20 @@ Nylon = React.createClass
   displayName: 'Nylon'
 
   getDefaultProps: ->
-    octave: 2
-    active: false # add dot if active is true
+    dot: false # add dot if active is true
+    zero: false # is this nylon is fret zero
+    active: true
 
   attack: ->
     music.toot(notes[@props.note], @props.octave)
 
   render: ->
     dom 'div',
-      className: 'string'
+      className: if @props.zero then 'zero' else 'string'
       title: notes[@props.note]
       onClick: @attack
-      if @props.active
-        dom Dot, note: @props.note, octave: @props.octave
+      if @props.dot
+        dom Dot, @props
 
 
 # Guitar has 3 components: Tunings, Zeroes (dot at fret-0) and Frets.
@@ -63,29 +60,31 @@ Guitar = React.createClass
       dom 'div', className: 'tunings',
         for tune, i in tuning
           dom 'div', key: i, className: "tuning color-#{tune}", notes[tune]
-      # Dots at fret-0
+      # Nylon at fret-0
       dom 'div', className: 'zeroes',
         for tune, i in tuning
           if i > 0 # first tuning octave is predefined
             # otherwise define the current tuning octave
-            tuningOctave.push(tuningOctave[i - 1] + (tuning[i - 1] > tune))
-          dom 'div', key: i, className: 'zero', title: notes[tune],
-            if tune in chord
-              dom Dot,
-                note: tune,
-                octave: tuningOctave[i]
-      # Frets. Each has 6 strings (Nylon). If string match to one of the chords,
-      # set as active
+            tuningOctave.push(tuningOctave[i - 1] + (tuning[i - 1] >= tune))
+          dom Nylon,
+            key: i
+            zero: true
+            note: tune
+            octave: tuningOctave[i]
+            dot: tune in chord
+
+      # Frets. Each has 6 strings (Nylon). If string match to one of note
+      # the chords, set as active
       for fret in [0..@props.fret]
         dom 'div', key: fret, className: 'fret',
           if fret in @props.fretHints
-            dom 'span', key: 'index', className: 'index', fret
+            dom 'span', className: 'index', fret
           for tune, i in tuning
             note = (tune + fret + 1) % 12
             dom Nylon,
               key: i
               note: note
               octave: tuningOctave[i] + (tune + fret + 1) / 12 >> 0
-              active: note in chord
+              dot: note in chord
 
 module.exports = Guitar
