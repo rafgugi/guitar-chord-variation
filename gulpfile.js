@@ -1,9 +1,5 @@
-'use strict';
-
 var plugins    = require('gulp-load-plugins');
-var yargs      = require('yargs');
 var gulp       = require('gulp');
-var coffee     = require('gulp-coffee');
 var browserify = require('gulp-browserify');
 var concat     = require('gulp-concat');
 
