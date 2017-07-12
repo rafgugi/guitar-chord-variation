@@ -50,8 +50,8 @@ class Music extends EventEmitter
     if @active.length is 0
       @initActive()
     for tune, i in @tuning
-      octave = @tuningOctave[i] + (tune + @active[i] + 1) / 12 >> 0
-      notes.push '' + @notes[(tune + @active[i] + 1) % 12] + octave
+      octave = @tuningOctave[i] + (tune + @active[i]) / 12 >> 0
+      notes.push '' + @notes[(tune + @active[i]) % 12] + octave
     @polySynth.triggerAttackRelease(notes, '2n')
 
   chord: []
