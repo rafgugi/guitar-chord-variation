@@ -14,7 +14,6 @@ class Music {
   tuningOctave: number[];
 
   constructor() {
-    super();
     this.synth = new Tone.Synth().toDestination();
     this.polySynth = new Tone.PolySynth(Tone.Synth).toDestination();
     this.notes = [

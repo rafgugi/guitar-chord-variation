@@ -1,9 +1,6 @@
 @use "sass:list";
-@use 'sass:color';
-@use 'font-awesome';
-
-@import 'normalize.css';
-@import 'node_modules/skeleton-framework/src/skeleton.css';
+@use "sass:color";
+@use "font-awesome";
 
 hr {
   margin-top: 0;
@@ -62,7 +59,7 @@ hr {
     .index {
       position: absolute;
       margin-left: -25px;
-      margin-top:  -12px;
+      margin-top: -12px;
     }
 
     // string, sometimes has a dot
@@ -112,7 +109,7 @@ $colors-list:
   #a2b86c;
 @each $current-color in $colors-list {
   $i: list.index($colors-list, $current-color) - 1;
-  .color-#{$i} { 
+  .color-#{$i} {
     color: $current-color;
   }
   .color-#{$i}-muted {

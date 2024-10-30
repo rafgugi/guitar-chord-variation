@@ -11,23 +11,22 @@ interface DotProps {
   active: boolean;
 }
 
-class Dot extends React.Component<DotProps> {
-  attack = () => {
-    music.toot(notes[this.props.note], this.props.octave);
-    music.setActive(this.props.string, this.props.fret);
+const Dot: React.FC<DotProps> = ({ note, octave, string, fret, active }) => {
+  const attack = () => {
+    music.toot(notes[note], octave);
+    music.setActive(string, fret);
   };
 
-  render() {
-    const active = this.props.active ? '' : '-muted';
-    return (
-      <i
-        title={notes[this.props.note]}
-        className={`dot fa fa-circle color-${this.props.note}${active}`}
-        onClick={this.attack}
-      />
-    );
-  }
-}
+  const activeClass = active ? '' : '-muted';
+
+  return (
+    <i
+      title={notes[note]}
+      className={`dot fa fa-circle color-${note}${activeClass}`}
+      onClick={attack}
+    />
+  );
+};
 
 interface NylonProps {
   note: number;
@@ -39,29 +38,21 @@ interface NylonProps {
   active?: boolean;
 }
 
-class Nylon extends React.Component<NylonProps> {
-  static defaultProps = {
-    dot: false,
-    zero: false,
-    active: true,
+const Nylon: React.FC<NylonProps> = ({ note, octave, string, fret, dot = false, zero = false, active = true }) => {
+  const attack = () => {
+    music.toot(notes[note], octave);
   };
 
-  attack = () => {
-    music.toot(notes[this.props.note], this.props.octave);
-  };
-
-  render() {
-    return (
-      <div
-        className={this.props.zero ? 'zero' : 'string'}
-        title={notes[this.props.note]}
-        onClick={this.attack}
-      >
-        {this.props.dot && <Dot {...this.props} />}
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      className={zero ? 'zero' : 'string'}
+      title={notes[note]}
+      onClick={attack}
+    >
+      {dot && <Dot note={note} octave={octave} string={string} fret={fret} active={active} />}
+    </div>
+  );
+};
 
 interface GuitarProps {
   firstTuningOctave?: number;
@@ -72,68 +63,63 @@ interface GuitarProps {
   active?: number[];
 }
 
-class Guitar extends React.Component<GuitarProps> {
-  static defaultProps = {
-    firstTuningOctave: 3,
-    tuning: music.defaultTuning,
-    fret: music.fret,
-    fretHints: [0, 3, 5, 7, 9, 12, 15, 17],
-    chord: [],
-    active: [],
-  };
+const Guitar: React.FC<GuitarProps> = ({
+  firstTuningOctave = 3,
+  tuning = music.defaultTuning,
+  fret = music.fret,
+  fretHints = [0, 3, 5, 7, 9, 12, 15, 17],
+  chord = [],
+  active = [],
+}) => {
+  const tuningOctave = music.tuningOctave;
+  const noactive = active.length === 0;
 
-  render() {
-    const { tuning, chord, active } = this.props;
-    const tuningOctave = music.tuningOctave;
-    const noactive = active.length === 0;
-
-    return (
-      <div className="guitar">
-        <div className="tunings">
-          {tuning.map((tune, i) => (
-            <div key={i} className={`tuning color-${tune}`}>
-              {notes[tune]}
-            </div>
-          ))}
-        </div>
-        <div className="zeroes">
-          {tuning.map((tune, i) => (
-            <Nylon
-              key={i}
-              string={i}
-              fret={0}
-              zero={true}
-              note={tune}
-              octave={tuningOctave[i]}
-              dot={chord.includes(tune)}
-              active={noactive || active[i] === 0}
-            />
-          ))}
-        </div>
-        {[...Array(this.props.fret + 1).keys()].slice(1).map((fret) => (
-          <div key={fret} className="fret">
-            {this.props.fretHints.includes(fret - 1) && (
-              <span className="index">{fret - 1}</span>
-            )}
-            {tuning.map((tune, i) => {
-              const note = (tune + fret) % 12;
-              return (
-                <Nylon
-                  key={i}
-                  string={i}
-                  fret={fret}
-                  note={note}
-                  octave={tuningOctave[i] + Math.floor((tune + fret) / 12)}
-                  dot={chord.includes(note)}
-                  active={noactive || active[i] === fret}
-                />
-              );
-            })}
+  return (
+    <div className="guitar">
+      <div className="tunings">
+        {tuning.map((tune, i) => (
+          <div key={i} className={`tuning color-${tune}`}>
+            {notes[tune]}
           </div>
         ))}
       </div>
-    );
-  }
-}
+      <div className="zeroes">
+        {tuning.map((tune, i) => (
+          <Nylon
+            key={i}
+            string={i}
+            fret={0}
+            zero={true}
+            note={tune}
+            octave={tuningOctave[i]}
+            dot={chord.includes(tune)}
+            active={noactive || active[i] === 0}
+          />
+        ))}
+      </div>
+      {[...Array(fret + 1).keys()].slice(1).map((fret) => (
+        <div key={fret} className="fret">
+          {fretHints.includes(fret - 1) && (
+            <span className="index">{fret - 1}</span>
+          )}
+          {tuning.map((tune, i) => {
+            const note = (tune + fret) % 12;
+            return (
+              <Nylon
+                key={i}
+                string={i}
+                fret={fret}
+                note={note}
+                octave={tuningOctave[i] + Math.floor((tune + fret) / 12)}
+                dot={chord.includes(note)}
+                active={noactive || active[i] === fret}
+              />
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default Guitar;
