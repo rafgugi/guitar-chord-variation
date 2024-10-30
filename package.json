@@ -1,30 +1,38 @@
 {
-  "name": "ez-guitar-chord",
-  "version": "0.0.01",
+  "name": "guitar-chord-variation",
+  "version": "1.0.0",
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
-    "start": "gulp",
-    "build": "gulp build --production"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
-  "author": "Risyanggi Azmi Faizin <switgarlik@gmail.com",
+  "author": "Risyanggi Azmi Faizin",
   "license": "MIT",
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.2",
-    "tone": "^0.9.0"
+    "normalize.css": "^8.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "skeleton-framework": "^1.0.10",
+    "tone": "^15.0.4",
+    "vite-plugin-sass": "^0.1.0"
   },
   "devDependencies": {
-    "coffeeify": "^2.0.1",
-    "gulp": "gulpjs/gulp#4.0",
-    "gulp-browserify": "^0.5.1",
-    "gulp-coffee": "^2.3.3",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.0",
-    "gulp-load-plugins": "^1.1.0",
-    "gulp-sass": "^2.1.0",
-    "gulp-uglify": "^1.2.0",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "sass-embedded": "^1.80.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.10"
   },
+  "keywords": [],
   "private": true
 }

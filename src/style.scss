@@ -1,3 +1,10 @@
+@use "sass:list";
+@use 'sass:color';
+@use 'font-awesome';
+
+@import 'normalize.css';
+@import 'node_modules/skeleton-framework/src/skeleton.css';
+
 hr {
   margin-top: 0;
   margin-bottom: 25px;
@@ -104,11 +111,12 @@ $colors-list:
   #ebc844
   #a2b86c;
 @each $current-color in $colors-list {
-  $i: index($colors-list, $current-color) - 1;
+  $i: list.index($colors-list, $current-color) - 1;
   .color-#{$i} { 
     color: $current-color;
   }
   .color-#{$i}-muted {
-    color: ($current-color * 1 + #ffffff * 3) / 4;
+    // color: ($current-color * 1 + #ffffff * 3) / 4;
+    color: color.mix($current-color, #ffffff, $weight: 25%);
   }
 }
