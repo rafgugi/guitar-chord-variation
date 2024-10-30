@@ -4,20 +4,11 @@ import music from '../music';
 
 const notes = music.notes;
 
-interface MainState {
-  chord: number[];
-  tuning: number[];
-  active: number[];
-  advanced: boolean;
-}
-
 const Main: React.FC = () => {
-  const [state, setState] = useState<MainState>({
-    chord: [],
-    tuning: [],
-    active: [],
-    advanced: false,
-  });
+  const [chord, setChord] = useState<number[]>([]);
+  const [tuning, setTuning] = useState<number[]>(music.defaultTuning);
+  const [active, setActive] = useState<number[]>([]);
+  const [advanced, setAdvanced] = useState<boolean>(false);
 
   const chordRoot = useRef<HTMLSelectElement>(null);
   const chordVariation = useRef<HTMLSelectElement>(null);
@@ -25,62 +16,51 @@ const Main: React.FC = () => {
   const manualTuning = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    music.on('chord', () => {
-      setState((prevState) => ({ ...prevState, chord: music.chord }));
-    });
-    music.on('tuning', () => {
-      setState((prevState) => ({ ...prevState, tuning: music.tuning }));
-      resetTuning();
-    });
-    music.on('active', () => {
-      setState((prevState) => ({ ...prevState, active: music.active }));
-    });
-
-    music.setTuning(music.defaultTuning);
-    easyChord();
     resetTuning();
+    easyChord();
   }, []);
 
   const handleManualChordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    music.setChord(music.predictNotes(e.target.value));
+    const newChord = music.predictNotes(e.target.value);
+    setChord(newChord);
   };
 
   const handleManualTuningChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const tuning = music.predictNotes(e.target.value);
-    if (tuning.length === 6) {
-      music.setTuning(tuning);
+    const newTuning = music.predictNotes(e.target.value);
+    if (newTuning.length === 6) {
+      setTuning(newTuning);
     }
   };
 
   const handleAdvancedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setState((prevState) => ({ ...prevState, advanced: e.target.checked }));
+    setAdvanced(e.target.checked);
   };
 
   const handleResetButton = () => {
-    music.setTuning(music.defaultTuning);
+    setTuning(music.defaultTuning);
     easyChord();
-    music.resetActive();
+    setActive([]);
   };
 
   const handlePlayButton = () => {
-    music.playActive();
+    music.playNotes(active.map((fret, string) => notes[(tuning[string] + fret) % 12]));
   };
 
   const easyChord = () => {
     const root = Number(chordRoot.current?.value);
     const variation = Number(chordVariation.current?.value);
 
-    const chord = music.generateChord(root, variation);
-    music.setChord(chord);
+    const newChord = music.generateChord(root, variation);
+    setChord(newChord);
 
-    const manualChordValue = chord.map((note) => notes[note]);
+    const manualChordValue = newChord.map((note) => notes[note]);
     if (manualChord.current) {
       manualChord.current.value = manualChordValue.join(' ');
     }
   };
 
   const resetTuning = () => {
-    const manualTuningValue = state.tuning.map((note) => notes[note]);
+    const manualTuningValue = tuning.map((note) => notes[note]);
     if (manualTuning.current) {
       manualTuning.current.value = manualTuningValue.join(' ');
     }
@@ -120,7 +100,7 @@ const Main: React.FC = () => {
           <span className="label-body">Advanced mode</span>
         </label>
 
-        <div className={state.advanced ? '' : 'u-hide'}>
+        <div className={advanced ? '' : 'u-hide'}>
           <label>Manual chord</label>
           <input
             type="text"
@@ -134,7 +114,7 @@ const Main: React.FC = () => {
           <input
             type="text"
             className="u-full-width"
-            placeholder="try E A D G B E"
+            placeholder="E A D G B E"
             ref={manualTuning}
             onChange={handleManualTuningChange}
             onBlur={resetTuning}
@@ -154,9 +134,9 @@ const Main: React.FC = () => {
 
       <span className="col">
         <Guitar
-          chord={state.chord}
-          tuning={state.tuning}
-          active={state.active}
+          chord={chord}
+          tuning={tuning}
+          active={active}
         />
       </span>
     </section>
