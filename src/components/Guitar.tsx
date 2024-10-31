@@ -1,5 +1,5 @@
-import React from 'react';
-import music from '../music';
+import React, { Dispatch, SetStateAction } from "react";
+import music from "../music";
 
 const notes = music.notes;
 
@@ -8,16 +8,28 @@ interface DotProps {
   octave: number;
   string: number;
   fret: number;
-  active: boolean;
+  isActive: boolean;
+  setActive: Dispatch<SetStateAction<number[]>>;
 }
 
-const Dot: React.FC<DotProps> = ({ note, octave, string, fret, active }) => {
+const Dot: React.FC<DotProps> = ({
+  note,
+  octave,
+  string,
+  fret,
+  isActive,
+  setActive,
+}) => {
   const attack = () => {
     music.toot(notes[note], octave);
-    music.setActive(string, fret);
+    setActive((prevActive: number[]) => {
+      const newActive = [...prevActive];
+      newActive[string] = fret;
+      return newActive;
+    });
   };
 
-  const activeClass = active ? '' : '-muted';
+  const activeClass = isActive ? "" : "-muted";
 
   return (
     <i
@@ -35,50 +47,73 @@ interface NylonProps {
   fret: number;
   dot?: boolean;
   zero?: boolean;
-  active?: boolean;
+  isActive?: boolean;
+  setActive: Dispatch<SetStateAction<number[]>>;
 }
 
-const Nylon: React.FC<NylonProps> = ({ note, octave, string, fret, dot = false, zero = false, active = true }) => {
+const Nylon: React.FC<NylonProps> = ({
+  note,
+  octave,
+  string,
+  fret,
+  dot = false,
+  zero = false,
+  isActive = true,
+  setActive,
+}) => {
   const attack = () => {
     music.toot(notes[note], octave);
   };
 
   return (
     <div
-      className={zero ? 'zero' : 'string'}
+      className={zero ? "zero" : "string"}
       title={notes[note]}
       onClick={attack}
     >
-      {dot && <Dot note={note} octave={octave} string={string} fret={fret} active={active} />}
+      {dot && (
+        <Dot
+          note={note}
+          octave={octave}
+          string={string}
+          fret={fret}
+          isActive={isActive}
+          setActive={setActive}
+        />
+      )}
     </div>
   );
 };
 
 interface GuitarProps {
-  firstTuningOctave?: number;
   tuning?: number[];
   fret?: number;
   fretHints?: number[];
   chord?: number[];
+  tuningOctave: number[];
   active?: number[];
+  setActive: Dispatch<SetStateAction<number[]>>;
 }
 
 const Guitar: React.FC<GuitarProps> = ({
-  firstTuningOctave = 3,
   tuning = music.defaultTuning,
   fret = music.fret,
   fretHints = [0, 3, 5, 7, 9, 12, 15, 17],
   chord = [],
   active = [],
+  tuningOctave = [],
+  setActive,
 }) => {
-  const tuningOctave = music.tuningOctave;
   const noactive = active.length === 0;
 
   return (
     <div className="guitar">
       <div className="tunings">
         {tuning.map((tune, i) => (
-          <div key={i} className={`tuning color-${tune}`}>
+          <div
+            key={i}
+            className={`tuning color-${tune}`}
+          >
             {notes[tune]}
           </div>
         ))}
@@ -93,12 +128,16 @@ const Guitar: React.FC<GuitarProps> = ({
             note={tune}
             octave={tuningOctave[i]}
             dot={chord.includes(tune)}
-            active={noactive || active[i] === 0}
+            isActive={noactive || active[i] === 0}
+            setActive={setActive}
           />
         ))}
       </div>
       {[...Array(fret + 1).keys()].slice(1).map((fret) => (
-        <div key={fret} className="fret">
+        <div
+          key={fret}
+          className="fret"
+        >
           {fretHints.includes(fret - 1) && (
             <span className="index">{fret - 1}</span>
           )}
@@ -112,7 +151,8 @@ const Guitar: React.FC<GuitarProps> = ({
                 note={note}
                 octave={tuningOctave[i] + Math.floor((tune + fret) / 12)}
                 dot={chord.includes(note)}
-                active={noactive || active[i] === fret}
+                isActive={noactive || active[i] === fret}
+                setActive={setActive}
               />
             );
           })}
