@@ -6,6 +6,7 @@ const notes = music.notes;
 
 const Main: React.FC = () => {
   const [chord, setChord] = useState<number[]>(music.chords[0].chord);
+  const [frets] = useState<number>(13);
   const [tuning, setTuning] = useState<number[]>(music.defaultTuning);
   const [tuningOctave, setTuningOctave] = useState<number[]>(
     music.defaultTuning,
@@ -18,6 +19,11 @@ const Main: React.FC = () => {
   const manualChord = useRef<HTMLInputElement>(null);
   const manualTuning = useRef<HTMLInputElement>(null);
 
+  // TODO: debugging active
+  useEffect(() => {
+    console.log("active: ", active, JSON.stringify(active));
+  }, [active]);
+
   useEffect(() => {
     let tuningOctave = [3]; // first tuning octave
     for (let i = 1; i < tuning.length; i++) {
@@ -25,6 +31,7 @@ const Main: React.FC = () => {
         tuningOctave[i - 1] + (tuning[i - 1] >= tuning[i] ? 1 : 0),
       );
     }
+    // TODO: extract to useEffect
     if (active.length !== 0) {
       initActive();
     }
@@ -34,6 +41,7 @@ const Main: React.FC = () => {
   const handleManualChordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newChord = music.predictNotes(e.target.value);
     setChord(newChord);
+    // TODO: extract to useEffect
     if (active.length !== 0) {
       initActive();
     }
@@ -63,9 +71,10 @@ const Main: React.FC = () => {
   };
 
   const initActive = (): number[] => {
+    // TODO: this logic must be extracted in music
     let active: number[] = [];
     for (const [, tune] of tuning.entries()) {
-      for (let fret = 0; fret <= music.fret; fret++) {
+      for (let fret = 0; fret <= frets; fret++) {
         if (chord.includes((fret + tune) % 12)) {
           active.push(fret);
           break;
@@ -76,6 +85,7 @@ const Main: React.FC = () => {
     return active;
   };
 
+  // TODO: this must run from the start, but not using this method
   const easyChord = () => {
     const root = Number(chordRoot.current?.value);
     const variation = Number(chordVariation.current?.value);
@@ -182,6 +192,7 @@ const Main: React.FC = () => {
       <span className="col">
         <Guitar
           chord={chord}
+          frets={frets}
           tuning={tuning}
           active={active}
           tuningOctave={tuningOctave}

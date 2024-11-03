@@ -6,7 +6,6 @@ class Music {
   notes: string[];
   chords: { text: string; chord: number[] }[];
   defaultTuning: number[];
-  fret: number;
 
   constructor() {
     this.synth = new Tone.Synth().toDestination();
@@ -38,7 +37,6 @@ class Music {
       { text: "sus", chord: [0, 5, 7] }, // C F G
     ];
     this.defaultTuning = [4, 9, 2, 7, 11, 4]; // E A D G B E
-    this.fret = 13;
   }
 
   predictNotes(text: string): number[] {
