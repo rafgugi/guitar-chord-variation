@@ -2,6 +2,9 @@
 @use "sass:color";
 @use "font-awesome";
 
+@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/skeleton-framework/1.1.1/skeleton.min.css");
+
 hr {
   margin-top: 0;
   margin-bottom: 25px;
