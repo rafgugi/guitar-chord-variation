@@ -1,8 +1,7 @@
 {
   "name": "guitar-chord-variation",
-  "version": "1.0.0",
-  "description": "",
-  "main": "gulpfile.js",
+  "version": "2.0.0",
+  "description": "Easy guitar chord variation finder.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
