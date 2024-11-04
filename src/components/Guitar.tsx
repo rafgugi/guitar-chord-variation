@@ -25,7 +25,7 @@ const Dot: React.FC<DotProps> = ({
     setActive((prevActive) =>
       prevActive.map((value, index) =>
         index === string ? (value === fret ? null : fret) : value,
-    ),
+      ),
     );
   };
 
@@ -45,9 +45,9 @@ interface NylonProps {
   octave: number;
   string: number;
   fret: number;
-  dot?: boolean;
-  zero?: boolean;
-  isActive?: boolean;
+  dot: boolean;
+  zero: boolean;
+  isActive: boolean;
   setActive: Dispatch<SetStateAction<(number | null)[]>>;
 }
 
@@ -56,9 +56,9 @@ const Nylon: React.FC<NylonProps> = ({
   octave,
   string,
   fret,
-  dot = false,
-  zero = false,
-  isActive = true,
+  dot,
+  zero,
+  isActive,
   setActive,
 }) => {
   const attack = () => {
@@ -88,20 +88,20 @@ const Nylon: React.FC<NylonProps> = ({
 interface GuitarProps {
   tuning: number[];
   frets: number;
-  fretHints?: number[];
+  fretHints: number[];
   chord: number[];
   tuningOctave: number[];
-  active?: (number | null)[];
+  active: (number | null)[];
   setActive: Dispatch<SetStateAction<(number | null)[]>>;
 }
 
 const Guitar: React.FC<GuitarProps> = ({
   tuning,
   frets,
-  fretHints = [0, 3, 5, 7, 9, 12, 15, 17],
-  chord = [],
-  active = [],
-  tuningOctave = [],
+  fretHints,
+  chord,
+  active,
+  tuningOctave,
   setActive,
 }) => {
   const noactive = active.length === 0;
@@ -148,6 +148,7 @@ const Guitar: React.FC<GuitarProps> = ({
                 key={i}
                 string={i}
                 fret={fret}
+                zero={false}
                 note={note}
                 octave={tuningOctave[i] + Math.floor((tune + fret) / 12)}
                 dot={chord.includes(note)}

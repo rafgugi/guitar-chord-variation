@@ -5,6 +5,7 @@ import music from "../music";
 const Main: React.FC = () => {
   const [chord, setChord] = useState<number[]>(music.chords[0].chord);
   const [frets] = useState<number>(13);
+  const [fretHints] = useState<number[]>([0, 3, 5, 7, 9, 12, 15, 17]);
   const [tuning, setTuning] = useState<number[]>(music.defaultTuning);
   const [tuningOctave, setTuningOctave] = useState<number[]>(
     music.defaultTuning,
@@ -19,12 +20,10 @@ const Main: React.FC = () => {
 
   // useEffect hook to handle the tuningOctave
   useEffect(() => {
-    let tuningOctave = [3]; // first tuning octave
-    for (let i = 1; i < tuning.length; i++) {
-      tuningOctave.push(
-        tuningOctave[i - 1] + (tuning[i - 1] >= tuning[i] ? 1 : 0),
-      );
-    }
+    const tuningOctave = tuning.reduce((acc, curr, i) => {
+      acc.push(acc[i - 1] + (tuning[i - 1] >= curr ? 1 : 0));
+      return acc;
+    }, [3]);
     setTuningOctave(tuningOctave);
   }, [tuning]);
 
@@ -187,6 +186,7 @@ const Main: React.FC = () => {
         <Guitar
           chord={chord}
           frets={frets}
+          fretHints={fretHints}
           tuning={tuning}
           active={active}
           tuningOctave={tuningOctave}
