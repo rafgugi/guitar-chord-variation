@@ -50,22 +50,41 @@ class Music {
     return result;
   }
 
+  getNotesNames(notes: number[]): string {
+    return notes.map((note) => this.notes[note]).join(" ");
+  }
+
   generateChord(chordRoot: number, chordVariation: number): number[] {
     return this.chords[chordVariation].chord.map(
       (interval) => (chordRoot + interval) % 12,
     );
   }
 
+  getMinFretsForChord(tuning: number[], frets: number, chord: number[]): (number | null)[] {
+    return tuning.map((tune) => {
+      for (let fret = 0; fret <= frets; fret++) {
+        if (chord.includes((fret + tune) % 12)) {
+          return fret;
+        }
+      }
+      return null;
+    });
+  }
+
   toot(tone: string, octave: number = 4, duration: string = "4n"): void {
     this.synth.triggerAttackRelease(`${tone}${octave}`, duration);
   }
 
-  playNotes(active: number[], tuning: number[], tuningOctave: number[]): void {
-    const notes: string[] = [];
-    for (const [i, tune] of tuning.entries()) {
-      const octave = (tuningOctave[i] + (tune + active[i]) / 12) >> 0;
-      notes.push(this.notes[(tune + active[i]) % 12] + octave);
-    }
+  playNotes(active: (number | null)[], tuning: number[], tuningOctave: number[]): void {
+    const notes = tuning
+      .map((tune, i) => {
+        if (active[i] === null) {
+          return null;
+        }
+        const octave = Math.floor(tuningOctave[i] + (tune + active[i]) / 12);
+        return this.notes[(tune + active[i]) % 12] + octave;
+      })
+      .filter((fret) => fret !== null);
     console.log("playing: ", notes);
     this.polySynth.triggerAttackRelease(notes, "2n");
   }

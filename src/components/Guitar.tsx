@@ -9,7 +9,7 @@ interface DotProps {
   string: number;
   fret: number;
   isActive: boolean;
-  setActive: Dispatch<SetStateAction<number[]>>;
+  setActive: Dispatch<SetStateAction<(number | null)[]>>;
 }
 
 const Dot: React.FC<DotProps> = ({
@@ -20,14 +20,13 @@ const Dot: React.FC<DotProps> = ({
   isActive,
   setActive,
 }) => {
-  // TODO: handle deactivate current one if it is active
   const attack = () => {
     music.toot(notes[note], octave);
-    setActive((prevActive: number[]) => {
-      const newActive = [...prevActive];
-      newActive[string] = fret;
-      return newActive;
-    });
+    setActive((prevActive) =>
+      prevActive.map((value, index) =>
+        index === string ? (value === fret ? null : fret) : value,
+    ),
+    );
   };
 
   const activeClass = isActive ? "" : "-muted";
@@ -49,7 +48,7 @@ interface NylonProps {
   dot?: boolean;
   zero?: boolean;
   isActive?: boolean;
-  setActive: Dispatch<SetStateAction<number[]>>;
+  setActive: Dispatch<SetStateAction<(number | null)[]>>;
 }
 
 const Nylon: React.FC<NylonProps> = ({
@@ -92,8 +91,8 @@ interface GuitarProps {
   fretHints?: number[];
   chord: number[];
   tuningOctave: number[];
-  active?: number[];
-  setActive: Dispatch<SetStateAction<number[]>>;
+  active?: (number | null)[];
+  setActive: Dispatch<SetStateAction<(number | null)[]>>;
 }
 
 const Guitar: React.FC<GuitarProps> = ({

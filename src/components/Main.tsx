@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Guitar from "./Guitar";
 import music from "../music";
 
-const notes = music.notes;
-
 const Main: React.FC = () => {
   const [chord, setChord] = useState<number[]>(music.chords[0].chord);
   const [frets] = useState<number>(13);
@@ -11,7 +9,7 @@ const Main: React.FC = () => {
   const [tuningOctave, setTuningOctave] = useState<number[]>(
     music.defaultTuning,
   );
-  const [active, setActive] = useState<number[]>([]);
+  const [active, setActive] = useState<(number | null)[]>([]);
   const [advanced, setAdvanced] = useState<boolean>(false);
 
   const chordRoot = useRef<HTMLSelectElement>(null);
@@ -24,6 +22,7 @@ const Main: React.FC = () => {
     console.log("active: ", active, JSON.stringify(active));
   }, [active]);
 
+  // useEffect hook to handle the tuningOctave
   useEffect(() => {
     let tuningOctave = [3]; // first tuning octave
     for (let i = 1; i < tuning.length; i++) {
@@ -31,25 +30,30 @@ const Main: React.FC = () => {
         tuningOctave[i - 1] + (tuning[i - 1] >= tuning[i] ? 1 : 0),
       );
     }
-    // TODO: extract to useEffect
-    if (active.length !== 0) {
-      initActive();
-    }
     setTuningOctave(tuningOctave);
   }, [tuning]);
 
-  const handleManualChordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newChord = music.predictNotes(e.target.value);
-    setChord(newChord);
-    // TODO: extract to useEffect
+  // useEffect hook to handle the active
+  useEffect(() => {
     if (active.length !== 0) {
       initActive();
     }
+  }, [tuning, chord]);
+
+  // useEffect hook for initializations
+  useEffect(() => {
+    easyChord();
+    resetTuning();
+  }, []);
+
+  const handleManualChordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newChord = music.predictNotes(e.target.value);
+    setChord(Array.from(new Set(newChord)));
   };
 
   const handleManualTuningChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTuning = music.predictNotes(e.target.value);
-      setTuning(newTuning);
+    setTuning(newTuning);
   };
 
   const handleAdvancedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,27 +69,17 @@ const Main: React.FC = () => {
   const handlePlayButton = () => {
     let currentActive = active;
     if (currentActive.length === 0) {
-      currentActive = initActive();
+      currentActive = music.getMinFretsForChord(tuning, frets, chord);
     }
+    setActive(currentActive);
     music.playNotes(currentActive, tuning, tuningOctave);
   };
 
-  const initActive = (): number[] => {
-    // TODO: this logic must be extracted in music
-    let active: number[] = [];
-    for (const [, tune] of tuning.entries()) {
-      for (let fret = 0; fret <= frets; fret++) {
-        if (chord.includes((fret + tune) % 12)) {
-          active.push(fret);
-          break;
-        }
-      }
-    }
+  const initActive = (): void => {
+    let active = music.getMinFretsForChord(tuning, frets, chord);
     setActive(active);
-    return active;
   };
 
-  // TODO: this must run from the start, but not using this method
   const easyChord = () => {
     const root = Number(chordRoot.current?.value);
     const variation = Number(chordVariation.current?.value);
@@ -93,16 +87,20 @@ const Main: React.FC = () => {
     const newChord = music.generateChord(root, variation);
     setChord(newChord);
 
-    const manualChordValue = newChord.map((note) => notes[note]);
     if (manualChord.current) {
-      manualChord.current.value = manualChordValue.join(" ");
+      manualChord.current.value = music.getNotesNames(newChord);
+    }
+  };
+
+  const resetChord = () => {
+    if (manualChord.current) {
+      manualChord.current.value = music.getNotesNames(chord);
     }
   };
 
   const resetTuning = () => {
-    const manualTuningValue = tuning.map((note) => notes[note]);
     if (manualTuning.current) {
-      manualTuning.current.value = manualTuningValue.join(" ");
+      manualTuning.current.value = music.getNotesNames(tuning);
     }
   };
 
@@ -115,7 +113,7 @@ const Main: React.FC = () => {
           ref={chordRoot}
           onChange={easyChord}
         >
-          {notes.map((note, i) => (
+          {music.notes.map((note, i) => (
             <option
               key={i}
               value={i}
@@ -167,6 +165,7 @@ const Main: React.FC = () => {
             placeholder="try C E G B"
             ref={manualChord}
             onChange={handleManualChordChange}
+            onBlur={resetChord}
           />
 
           <div>
