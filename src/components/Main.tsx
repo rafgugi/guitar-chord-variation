@@ -17,11 +17,6 @@ const Main: React.FC = () => {
   const manualChord = useRef<HTMLInputElement>(null);
   const manualTuning = useRef<HTMLInputElement>(null);
 
-  // TODO: debugging active
-  useEffect(() => {
-    console.log("active: ", active, JSON.stringify(active));
-  }, [active]);
-
   // useEffect hook to handle the tuningOctave
   useEffect(() => {
     let tuningOctave = [3]; // first tuning octave
