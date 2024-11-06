@@ -1,3 +1,10 @@
+@use "sass:list";
+@use "sass:color";
+@use "font-awesome";
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/skeleton-framework/1.1.1/skeleton.min.css");
+
 hr {
   margin-top: 0;
   margin-bottom: 25px;
@@ -16,7 +23,6 @@ hr {
 
 .guitar {
   border-top: 1px solid #333;
-  width: 130px;
   background: #eee;
   padding: 0 5px 0 5px;
   margin-left: 30px;
@@ -55,7 +61,7 @@ hr {
     .index {
       position: absolute;
       margin-left: -25px;
-      margin-top:  -12px;
+      margin-top: -12px;
     }
 
     // string, sometimes has a dot
@@ -104,11 +110,12 @@ $colors-list:
   #ebc844
   #a2b86c;
 @each $current-color in $colors-list {
-  $i: index($colors-list, $current-color) - 1;
-  .color-#{$i} { 
+  $i: list.index($colors-list, $current-color) - 1;
+  .color-#{$i} {
     color: $current-color;
   }
   .color-#{$i}-muted {
-    color: ($current-color * 1 + #ffffff * 3) / 4;
+    // color: ($current-color * 1 + #ffffff * 3) / 4;
+    color: color.mix($current-color, #ffffff, $weight: 25%);
   }
 }
