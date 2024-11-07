@@ -1,6 +1,6 @@
 {
   "name": "guitar-chord-variation",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Easy guitar chord variation finder.",
   "scripts": {
     "dev": "vite",

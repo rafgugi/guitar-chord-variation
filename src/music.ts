@@ -54,6 +54,16 @@ class Music {
     return notes.map((note) => this.notes[note]).join(" ");
   }
 
+  getOctavesProgression(notes: number[]): number[] {
+    let octaves = [3];
+    for (let i = 1; i < notes.length; i++) {
+      octaves.push(
+        octaves[i - 1] + (notes[i - 1] >= notes[i] ? 1 : 0),
+      );
+    }
+    return octaves;
+  }
+
   generateChord(chordRoot: number, chordVariation: number): number[] {
     return this.chords[chordVariation].chord.map(
       (interval) => (chordRoot + interval) % 12,

@@ -20,11 +20,7 @@ const Main: React.FC = () => {
 
   // useEffect hook to handle the tuningOctave
   useEffect(() => {
-    const tuningOctave = tuning.reduce((acc, curr, i) => {
-      acc.push(acc[i - 1] + (tuning[i - 1] >= curr ? 1 : 0));
-      return acc;
-    }, [3]);
-    setTuningOctave(tuningOctave);
+    setTuningOctave(music.getOctavesProgression(tuning));
   }, [tuning]);
 
   // useEffect hook to handle the active
