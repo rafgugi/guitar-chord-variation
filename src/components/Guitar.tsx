@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import music from "../music";
+import speaker from "../speaker";
 
 const notes = music.notes;
 
@@ -21,7 +22,7 @@ const Dot: React.FC<DotProps> = ({
   setActive,
 }) => {
   const attack = () => {
-    music.toot(notes[note], octave);
+    speaker.toot(notes[note], octave);
     setActive((prevActive) =>
       prevActive.map((value, index) =>
         index === string ? (value === fret ? null : fret) : value,
@@ -62,7 +63,7 @@ const Nylon: React.FC<NylonProps> = ({
   setActive,
 }) => {
   const attack = () => {
-    music.toot(notes[note], octave);
+    speaker.toot(notes[note], octave);
   };
 
   return (

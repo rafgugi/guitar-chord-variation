@@ -1,15 +1,9 @@
-import * as Tone from "tone";
-
 class Music {
-  synth: Tone.Synth;
-  polySynth: Tone.PolySynth;
   notes: string[];
   chords: { text: string; chord: number[] }[];
   defaultTuning: number[];
 
   constructor() {
-    this.synth = new Tone.Synth().toDestination();
-    this.polySynth = new Tone.PolySynth(Tone.Synth).toDestination();
     this.notes = [
       "C", // 0
       "C#", // 1
@@ -79,24 +73,6 @@ class Music {
       }
       return null;
     });
-  }
-
-  toot(tone: string, octave: number = 4, duration: string = "4n"): void {
-    this.synth.triggerAttackRelease(`${tone}${octave}`, duration);
-  }
-
-  playNotes(active: (number | null)[], tuning: number[], tuningOctave: number[]): void {
-    const notes = tuning
-      .map((tune, i) => {
-        if (active[i] === null) {
-          return null;
-        }
-        const octave = Math.floor(tuningOctave[i] + (tune + active[i]) / 12);
-        return this.notes[(tune + active[i]) % 12] + octave;
-      })
-      .filter((fret) => fret !== null);
-    console.log("playing: ", notes);
-    this.polySynth.triggerAttackRelease(notes, "2n");
   }
 }
 

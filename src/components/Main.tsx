@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Guitar from "./Guitar";
 import music from "../music";
+import speaker from "../speaker";
 
 const Main: React.FC = () => {
   const [chord, setChord] = useState<number[]>(music.chords[0].chord);
@@ -62,7 +63,7 @@ const Main: React.FC = () => {
       currentActive = music.getMinFretsForChord(tuning, frets, chord);
     }
     setActive(currentActive);
-    music.playNotes(currentActive, tuning, tuningOctave);
+    speaker.playNotes(currentActive, tuning, tuningOctave);
   };
 
   const initActive = (): void => {
