@@ -27,7 +27,7 @@ class Music {
       { text: "aug", chord: [0, 4, 8] }, // C E G#
       { text: "aug7", chord: [0, 4, 8, 10] }, // C E G# Bb
       { text: "dim", chord: [0, 3, 6] }, // C Eb Gb
-      { text: "dim7", chord: [0, 3, 6, 9] }, // C Eb Gb Bbb
+      { text: "dim7", chord: [0, 3, 6, 9] }, // C Eb Gb A
       { text: "sus", chord: [0, 5, 7] }, // C F G
     ];
     this.defaultTuning = [4, 9, 2, 7, 11, 4]; // E A D G B E
@@ -59,6 +59,10 @@ class Music {
   }
 
   generateChord(chordRoot: number, chordVariation: number): number[] {
+    if (chordRoot < 0 || chordRoot > 11 || chordVariation < 0 || chordVariation > this.chords.length) {
+      return [];
+    }
+
     return this.chords[chordVariation].chord.map(
       (interval) => (chordRoot + interval) % 12,
     );
