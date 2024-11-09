@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Guitar from "./Guitar";
 import music from "../music";
 import speaker from "../speaker";
@@ -8,9 +8,6 @@ const Main: React.FC = () => {
   const [frets] = useState<number>(13);
   const [fretHints] = useState<number[]>([0, 3, 5, 7, 9, 12, 15, 17]);
   const [tuning, setTuning] = useState<number[]>(music.defaultTuning);
-  const [tuningOctave, setTuningOctave] = useState<number[]>(
-    music.defaultTuning,
-  );
   const [active, setActive] = useState<(number | null)[]>([]);
   const [advanced, setAdvanced] = useState<boolean>(false);
 
@@ -19,9 +16,9 @@ const Main: React.FC = () => {
   const manualChord = useRef<HTMLInputElement>(null);
   const manualTuning = useRef<HTMLInputElement>(null);
 
-  // useEffect hook to handle the tuningOctave
-  useEffect(() => {
-    setTuningOctave(music.getOctavesProgression(tuning));
+  // useMemo hook to handle the tuningOctave
+  const tuningOctave: number[] = useMemo(() => {
+    return music.getOctavesProgression(tuning);
   }, [tuning]);
 
   // useEffect hook to handle the active
