@@ -11,7 +11,9 @@ class Speaker {
   }
 
   toot(tone: string, octave: number = 4, duration: string = "4n"): void {
-    this.synth.triggerAttackRelease(`${tone}${octave}`, duration);
+    const note = `${tone}${octave}`;
+    console.log("playing: ", note);
+    this.synth.triggerAttackRelease(note, duration);
   }
 
   playNotes(active: (number | null)[], tuning: number[], tuningOctave: number[], duration: string = "2n"): void {
