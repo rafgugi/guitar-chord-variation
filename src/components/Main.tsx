@@ -46,6 +46,7 @@ const Main: React.FC = () => {
 
   const handleAdvancedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAdvanced(e.target.checked);
+    speaker.toneStart();
   };
 
   const handleResetButton = () => {
